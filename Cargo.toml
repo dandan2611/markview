@@ -1,0 +1,22 @@
+[package]
+name = "mdview"
+version = "0.1.0"
+edition = "2021"
+description = "A terminal-based Markdown viewer with syntax highlighting"
+license = "GPL-3.0"
+repository = "https://github.com/dandan2611/MDView"
+keywords = ["markdown", "tui", "terminal", "viewer"]
+categories = ["command-line-utilities"]
+
+[dependencies]
+ratatui = "0.29"
+crossterm = { version = "0.28", features = ["event-stream"] }
+tokio = { version = "1", features = ["full"] }
+pulldown-cmark = { version = "0.12", features = ["simd"] }
+syntect = "5"
+notify = "7"
+notify-debouncer-mini = "0.5"
+clap = { version = "4", features = ["derive"] }
+anyhow = "1"
+unicode-width = "0.2"
+open = "5"
