@@ -27,6 +27,9 @@ impl EventReader {
         // Spawn crossterm event reader
         tokio::spawn(async move {
             loop {
+                if crossterm_tx.is_closed() {
+                    break;
+                }
                 if event::poll(Duration::from_millis(50)).unwrap_or(false) {
                     if let Ok(evt) = event::read() {
                         let app_event = match evt {
