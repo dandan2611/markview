@@ -31,7 +31,7 @@ use ui::viewer::ViewerWidget;
 use ratatui::widgets::Widget;
 
 #[derive(ClapParser, Debug)]
-#[command(name = "mdview", about = "Terminal Markdown Viewer")]
+#[command(name = "markview", about = "Terminal Markdown Viewer")]
 struct Cli {
     /// Markdown file to view
     file: Option<PathBuf>,

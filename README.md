@@ -1,8 +1,8 @@
-# mdview
+# markview
 
 A fast, feature-rich terminal Markdown viewer built with Rust.
 
-mdview renders Markdown files directly in your terminal with syntax highlighting, mouse support, and live file reloading.
+markview renders Markdown files directly in your terminal with syntax highlighting, mouse support, and live file reloading.
 
 ## Features
 
@@ -20,32 +20,32 @@ mdview renders Markdown files directly in your terminal with syntax highlighting
 ### From crates.io
 
 ```
-cargo install mdview
+cargo install markview
 ```
 
 ### From source
 
 ```
-git clone https://github.com/dandan2611/MDView.git
-cd md-tui
+git clone https://github.com/dandan2611/markview.git
+cd markview
 cargo install --path .
 ```
 
 ### Pre-built binaries
 
-Download binaries for Linux, macOS, and Windows from the [Releases](https://github.com/dandan2611/MDView/releases) page.
+Download binaries for Linux, macOS, and Windows from the [Releases](https://github.com/dandan2611/markview/releases) page.
 
 ## Usage
 
 ```
 # View a file
-mdview README.md
+markview README.md
 
 # Open the file picker in the current directory
-mdview
+markview
 
 # Read from stdin
-cat README.md | mdview
+cat README.md | markview
 ```
 
 ## Keybindings
@@ -109,7 +109,7 @@ Mouse scrolling and click-to-open links are also supported.
 
 ## Theming
 
-mdview automatically detects your terminal's dark or light background using the `COLORFGBG` environment variable and adjusts colors accordingly. It defaults to dark mode if detection fails.
+markview automatically detects your terminal's dark or light background using the `COLORFGBG` environment variable and adjusts colors accordingly. It defaults to dark mode if detection fails.
 
 Code blocks use the **base16-ocean** color scheme (dark or light variant).
 

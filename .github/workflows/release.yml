@@ -66,21 +66,21 @@ jobs:
         if: matrix.archive == 'tar.gz'
         run: |
           cd target/${{ matrix.target }}/release
-          tar czf ../../../mdview-${{ matrix.target }}.tar.gz mdview
+          tar czf ../../../markview-${{ matrix.target }}.tar.gz markview
         shell: bash
 
       - name: Package (windows)
         if: matrix.archive == 'zip'
         run: |
           cd target/${{ matrix.target }}/release
-          7z a ../../../mdview-${{ matrix.target }}.zip mdview.exe
+          7z a ../../../markview-${{ matrix.target }}.zip markview.exe
         shell: bash
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: mdview-${{ matrix.target }}
-          path: mdview-${{ matrix.target }}.${{ matrix.archive }}
+          name: markview-${{ matrix.target }}
+          path: markview-${{ matrix.target }}.${{ matrix.archive }}
 
   publish-release:
     name: Publish GitHub Release
