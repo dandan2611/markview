@@ -25,9 +25,7 @@ impl Widget for StatusBar<'_> {
 
         // Clear the area
         for x in area.left()..area.right() {
-            buf[(x, area.y)]
-                .set_style(style)
-                .set_char(' ');
+            buf[(x, area.y)].set_style(style).set_char(' ');
         }
 
         let mode_str = match self.mode {

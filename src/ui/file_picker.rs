@@ -84,9 +84,7 @@ impl FilePicker {
     }
 
     pub fn selected_entry(&self) -> Option<&FileEntry> {
-        self.list_state
-            .selected()
-            .and_then(|i| self.entries.get(i))
+        self.list_state.selected().and_then(|i| self.entries.get(i))
     }
 
     pub fn move_up(&mut self) {
@@ -159,17 +157,11 @@ impl FilePicker {
         let items: Vec<ListItem> = self
             .entries
             .iter()
-            .map(|e| {
-                ListItem::new(Line::from(Span::raw(e.display_name())))
-            })
+            .map(|e| ListItem::new(Line::from(Span::raw(e.display_name()))))
             .collect();
 
         let list = List::new(items)
-            .block(
-                Block::default()
-                    .title(title)
-                    .borders(Borders::ALL),
-            )
+            .block(Block::default().title(title).borders(Borders::ALL))
             .highlight_style(
                 Style::default()
                     .bg(Color::DarkGray)

@@ -99,11 +99,8 @@ async fn main() -> Result<()> {
 
             match app.mode {
                 Mode::FilePicker => {
-                    let [main_area, status_area] = Layout::vertical([
-                        Constraint::Min(1),
-                        Constraint::Length(1),
-                    ])
-                    .areas(area);
+                    let [main_area, status_area] =
+                        Layout::vertical([Constraint::Min(1), Constraint::Length(1)]).areas(area);
 
                     if let Some(ref mut picker) = app.file_picker {
                         picker.render(main_area, frame.buffer_mut());
@@ -124,11 +121,9 @@ async fn main() -> Result<()> {
                     let has_search_bar = app.mode == Mode::Search;
                     let bottom_height = if has_search_bar { 2 } else { 1 };
 
-                    let [main_area, bottom_area] = Layout::vertical([
-                        Constraint::Min(1),
-                        Constraint::Length(bottom_height),
-                    ])
-                    .areas(area);
+                    let [main_area, bottom_area] =
+                        Layout::vertical([Constraint::Min(1), Constraint::Length(bottom_height)])
+                            .areas(area);
 
                     let link_line_indices = app.link_line_indices();
                     let viewer = ViewerWidget::new(
@@ -141,11 +136,9 @@ async fn main() -> Result<()> {
                     viewer.render(main_area, frame.buffer_mut());
 
                     if has_search_bar {
-                        let [search_area, status_area] = Layout::vertical([
-                            Constraint::Length(1),
-                            Constraint::Length(1),
-                        ])
-                        .areas(bottom_area);
+                        let [search_area, status_area] =
+                            Layout::vertical([Constraint::Length(1), Constraint::Length(1)])
+                                .areas(bottom_area);
 
                         let search_bar = SearchBar {
                             query: &app.search.query,
@@ -240,18 +233,19 @@ fn setup_file_watcher(
     let event_tx = tx;
     let mut last_event = std::time::Instant::now();
 
-    let mut watcher = notify::recommended_watcher(move |res: Result<notify::Event, notify::Error>| {
-        if let Ok(event) = res {
-            if event.kind.is_modify() {
-                let now = std::time::Instant::now();
-                if now.duration_since(last_event) > Duration::from_millis(300) {
-                    last_event = now;
-                    let _ = event_tx.send(AppEvent::FileChanged);
+    let mut watcher =
+        notify::recommended_watcher(move |res: Result<notify::Event, notify::Error>| {
+            if let Ok(event) = res {
+                if event.kind.is_modify() {
+                    let now = std::time::Instant::now();
+                    if now.duration_since(last_event) > Duration::from_millis(300) {
+                        last_event = now;
+                        let _ = event_tx.send(AppEvent::FileChanged);
+                    }
                 }
             }
-        }
-    })
-    .ok()?;
+        })
+        .ok()?;
 
     watcher
         .watch(&path, notify::RecursiveMode::NonRecursive)

@@ -59,9 +59,7 @@ impl SearchState {
     }
 
     pub fn current_line(&self) -> Option<usize> {
-        self.matches
-            .get(self.current_match)
-            .map(|m| m.line_index)
+        self.matches.get(self.current_match).map(|m| m.line_index)
     }
 
     pub fn match_info(&self) -> Option<String> {

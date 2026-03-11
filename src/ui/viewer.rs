@@ -49,9 +49,7 @@ impl Widget for ViewerWidget<'_> {
                         .iter()
                         .enumerate()
                         .filter(|(_, m)| m.line_index == line_idx)
-                        .map(|(i, m)| {
-                            (m.byte_start, m.byte_end, i == self.search.current_match)
-                        })
+                        .map(|(i, m)| (m.byte_start, m.byte_end, i == self.search.current_match))
                         .collect()
                 } else {
                     Vec::new()
@@ -131,8 +129,8 @@ fn apply_link_focus(line: &Line<'static>) -> Vec<Span<'static>> {
     let mut new_spans: Vec<Span<'static>> = Vec::new();
     for span in &line.spans {
         let has_underline = span.style.add_modifier.contains(Modifier::UNDERLINED);
-        let is_link_color = span.style.fg == Some(Color::Blue)
-            || span.style.fg == Some(Color::DarkGray);
+        let is_link_color =
+            span.style.fg == Some(Color::Blue) || span.style.fg == Some(Color::DarkGray);
 
         if has_underline || is_link_color {
             let style = Style::default()

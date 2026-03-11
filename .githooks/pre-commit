@@ -1,0 +1,21 @@
+#!/bin/sh
+
+echo "Running pre-commit checks..."
+
+# Format check
+echo "  Checking formatting..."
+cargo fmt --check 2>&1
+if [ $? -ne 0 ]; then
+    echo "ERROR: Code is not formatted. Run 'cargo fmt' to fix."
+    exit 1
+fi
+
+# Clippy
+echo "  Running clippy..."
+cargo clippy -- -D warnings 2>&1
+if [ $? -ne 0 ]; then
+    echo "ERROR: Clippy found issues. Fix them before committing."
+    exit 1
+fi
+
+echo "All checks passed."

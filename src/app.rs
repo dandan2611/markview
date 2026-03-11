@@ -147,7 +147,11 @@ impl App {
     }
 
     pub fn apply_highlight(&mut self, result: HighlightResult) {
-        if let Some(block) = self.code_blocks.iter().find(|b| b.block_id == result.block_id) {
+        if let Some(block) = self
+            .code_blocks
+            .iter()
+            .find(|b| b.block_id == result.block_id)
+        {
             let start = block.start_line;
             let end = block.end_line;
             let old_len = end - start;
@@ -239,17 +243,15 @@ impl App {
 
     fn handle_viewer_key(&mut self, key: KeyEvent) {
         match key.code {
-            KeyCode::Char('q') | KeyCode::Esc => {
-                match self.input_source {
-                    InputSource::FileArg(_) | InputSource::Stdin => {
-                        self.should_quit = true;
-                    }
-                    InputSource::Picker => {
-                        self.mode = Mode::FilePicker;
-                        self.current_file = None;
-                    }
+            KeyCode::Char('q') | KeyCode::Esc => match self.input_source {
+                InputSource::FileArg(_) | InputSource::Stdin => {
+                    self.should_quit = true;
                 }
-            }
+                InputSource::Picker => {
+                    self.mode = Mode::FilePicker;
+                    self.current_file = None;
+                }
+            },
             KeyCode::Char('j') | KeyCode::Down => self.scroll_down(1),
             KeyCode::Char('k') | KeyCode::Up => self.scroll_up(1),
             KeyCode::Char('d') | KeyCode::PageDown => {

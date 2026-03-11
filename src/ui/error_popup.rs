@@ -18,9 +18,7 @@ impl Widget for ErrorPopup<'_> {
         let block = Block::default()
             .title(Span::styled(
                 " Error ",
-                Style::default()
-                    .fg(Color::Red)
-                    .add_modifier(Modifier::BOLD),
+                Style::default().fg(Color::Red).add_modifier(Modifier::BOLD),
             ))
             .borders(Borders::ALL)
             .border_style(Style::default().fg(Color::Red));

@@ -93,14 +93,10 @@ pub fn parse_markdown(source: &str, theme: &Theme, terminal_width: u16) -> Parse
                     let indent = "  ".repeat(list_depth.saturating_sub(1));
                     let bq_prefix = build_blockquote_prefix(blockquote_depth, theme);
 
-                    let bullet = if let Some(idx) = list_indices.last_mut() {
-                        if let Some(ref mut n) = idx {
-                            let b = format!("{n}. ");
-                            *n += 1;
-                            b
-                        } else {
-                            "• ".to_string()
-                        }
+                    let bullet = if let Some(Some(ref mut n)) = list_indices.last_mut() {
+                        let b = format!("{n}. ");
+                        *n += 1;
+                        b
                     } else {
                         "• ".to_string()
                     };
@@ -191,9 +187,7 @@ pub fn parse_markdown(source: &str, theme: &Theme, terminal_width: u16) -> Parse
                 TagEnd::Heading(_) => {
                     if let Some(lvl) = heading_level.take() {
                         let fg = theme.heading_fg(lvl);
-                        let heading_style = Style::default()
-                            .fg(fg)
-                            .add_modifier(Modifier::BOLD);
+                        let heading_style = Style::default().fg(fg).add_modifier(Modifier::BOLD);
 
                         // Build prefix: "# ", "## ", etc.
                         let prefix = format!("{} ", "#".repeat(lvl as usize));
@@ -206,9 +200,7 @@ pub fn parse_markdown(source: &str, theme: &Theme, terminal_width: u16) -> Parse
                             content_len += span.content.len();
                             spans.push(Span::styled(
                                 span.content.to_string(),
-                                span.style
-                                    .fg(fg)
-                                    .add_modifier(Modifier::BOLD),
+                                span.style.fg(fg).add_modifier(Modifier::BOLD),
                             ));
                         }
                         lines.push(Line::from(spans));
@@ -252,7 +244,7 @@ pub fn parse_markdown(source: &str, theme: &Theme, terminal_width: u16) -> Parse
                 }
                 TagEnd::Item => {
                     if !current_spans.is_empty() {
-                        lines.push(Line::from(current_spans.drain(..).collect::<Vec<_>>()));
+                        lines.push(Line::from(std::mem::take(&mut current_spans)));
                     }
                 }
                 TagEnd::BlockQuote(_) => {
@@ -274,7 +266,8 @@ pub fn parse_markdown(source: &str, theme: &Theme, terminal_width: u16) -> Parse
                     } else {
                         code.lines().map(|l| l.len()).max().unwrap_or(0)
                     };
-                    let block_width = (max_line_len + 2).min((terminal_width as usize).saturating_sub(2));
+                    let block_width =
+                        (max_line_len + 2).min((terminal_width as usize).saturating_sub(2));
 
                     let start_line = lines.len();
 
@@ -298,10 +291,7 @@ pub fn parse_markdown(source: &str, theme: &Theme, terminal_width: u16) -> Parse
                         };
                         let spans = vec![
                             Span::styled("│ ", border_style),
-                            Span::styled(
-                                code_line.to_string(),
-                                Style::default().bg(bg),
-                            ),
+                            Span::styled(code_line.to_string(), Style::default().bg(bg)),
                             Span::styled(padding, Style::default().bg(bg)),
                             Span::styled(" │", border_style),
                         ];
@@ -359,7 +349,7 @@ pub fn parse_markdown(source: &str, theme: &Theme, terminal_width: u16) -> Parse
                 }
                 TagEnd::Paragraph => {
                     if !current_spans.is_empty() {
-                        lines.push(Line::from(current_spans.drain(..).collect::<Vec<_>>()));
+                        lines.push(Line::from(std::mem::take(&mut current_spans)));
                     }
                     lines.push(Line::from(""));
                 }
@@ -389,7 +379,7 @@ pub fn parse_markdown(source: &str, theme: &Theme, terminal_width: u16) -> Parse
                 }
                 TagEnd::FootnoteDefinition => {
                     if !current_spans.is_empty() {
-                        lines.push(Line::from(current_spans.drain(..).collect::<Vec<_>>()));
+                        lines.push(Line::from(std::mem::take(&mut current_spans)));
                     }
                 }
                 TagEnd::MetadataBlock(_) => {
@@ -408,10 +398,8 @@ pub fn parse_markdown(source: &str, theme: &Theme, terminal_width: u16) -> Parse
                 if in_code_block {
                     code_block_content.push_str(&text_str);
                 } else if let Some(ref mut ts) = table_state {
-                    ts.current_cell.push(Span::styled(
-                        text_str,
-                        style_stack.to_style(),
-                    ));
+                    ts.current_cell
+                        .push(Span::styled(text_str, style_stack.to_style()));
                 } else if link_url.is_some() {
                     // Check if we're in an image tag
                     let style = Style::default()
@@ -440,7 +428,7 @@ pub fn parse_markdown(source: &str, theme: &Theme, terminal_width: u16) -> Parse
             }
             Event::SoftBreak | Event::HardBreak => {
                 if !current_spans.is_empty() {
-                    lines.push(Line::from(current_spans.drain(..).collect::<Vec<_>>()));
+                    lines.push(Line::from(std::mem::take(&mut current_spans)));
                 }
                 if blockquote_depth > 0 {
                     let bq_prefix = build_blockquote_prefix(blockquote_depth, theme);

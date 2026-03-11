@@ -25,10 +25,7 @@ impl Widget for SearchBar<'_> {
                     .add_modifier(Modifier::BOLD),
             ),
             Span::styled(self.query.to_string(), style),
-            Span::styled(
-                "█",
-                Style::default().fg(Color::White),
-            ),
+            Span::styled("█", Style::default().fg(Color::White)),
         ]);
 
         buf.set_line(area.left(), area.top(), &line, area.width);
